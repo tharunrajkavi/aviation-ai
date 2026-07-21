@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: skycrew-db
+    environment:
+      POSTGRES_DB: skycrewdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - skycrew-network
+
+  backend:
+    build: ./skycrew-backend
+    container_name: skycrew-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.profiles.active=prod
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    networks:
+      - skycrew-network
+
+  ai-service:
+    build: ./skycrew-ai
+    container_name: skycrew-ai-service
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    networks:
+      - skycrew-network
+
+  frontend:
+    build: ./skycrew-frontend
+    container_name: skycrew-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - ai-service
+    networks:
+      - skycrew-network
+
+volumes:
+  postgres_data:
+
+networks:
+  skycrew-network:
+    driver: bridge

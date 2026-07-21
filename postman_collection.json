@@ -1,0 +1,465 @@
+{
+	"info": {
+		"_postman_id": "0d6118d2-430b-4d43-9824-7407a16b9b24",
+		"name": "SkyCrew AI Operations API",
+		"description": "Collection containing all required REST endpoints for login, flight coordination, crew registry CRUD, airport cataloging, compliance rules toggling, and LangGraph multi-agent optimizations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sign In (Dispatcher)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"dispatcher\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flight Management",
+			"item": [
+				{
+					"name": "List Flights",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/flights",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Flight Schedule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"flightNumber\": \"AA400\",\n    \"airline\": \"American Airlines\",\n    \"aircraftId\": 1,\n    \"sourceAirportId\": 1,\n    \"destinationAirportId\": 2,\n    \"departureTime\": \"2026-07-18T10:00:00\",\n    \"arrivalTime\": \"2026-07-18T15:30:00\",\n    \"status\": \"SCHEDULED\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/flights",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Flight Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"DELAYED\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/flights/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Crew to Flight",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"crewMemberId\": 3,\n    \"role\": \"CO_PILOT\",\n    \"status\": \"ASSIGNED\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/flights/1/assign",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights",
+								"1",
+								"assign"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Crew Registry",
+			"item": [
+				{
+					"name": "List Active Crew",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/crew",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"crew"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Onboard Crew Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"fo_mark\",\n    \"email\": \"mark@skycrew.com\",\n    \"password\": \"password\",\n    \"role\": \"ROLE_PILOT\",\n    \"name\": \"FO Mark Spencer\",\n    \"licenseNumber\": \"P-29837\",\n    \"qualification\": \"FIRST_OFFICER\",\n    \"certifications\": \"B737, B777\",\n    \"currentAirportCode\": \"JFK\",\n    \"totalFlyingHours\": 890.0,\n    \"languages\": \"English, Italian\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/crew",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"crew"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Operations Metrics & Logs",
+			"item": [
+				{
+					"name": "List Active Weather Alerts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/ops/weather-alerts?active=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ops",
+								"weather-alerts"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trigger Simulated Storm",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportCode\": \"KJFK\",\n    \"severity\": \"SEVERE\",\n    \"weatherType\": \"STORM\",\n    \"message\": \"Simulated intense wind shear 35kts METAR KJFK\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/ops/weather-alerts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ops",
+								"weather-alerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch AI Rules Config",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/ops/ai-rules",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ops",
+								"ai-rules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Dispatch Audit Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/ops/audit-logs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ops",
+								"audit-logs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AI Service Nodes",
+			"item": [
+				{
+					"name": "Trigger LangGraph Roster Swap",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"flight_id\": 1,\n    \"flight_number\": \"AA100\",\n    \"issue_type\": \"WEATHER\",\n    \"issue_details\": \"Severe Storm forecast near JFK.\",\n    \"current_crew\": [\n        {\n            \"id\": 1,\n            \"name\": \"Captain John Doe\",\n            \"restHoursRemaining\": 8.0,\n            \"totalFlyingHours\": 5200.0,\n            \"qualification\": \"CAPTAIN\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/ai/optimize",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ai",
+								"optimize"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assistant NLP Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"Are there any active FAA violations?\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/ai/chat",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ai",
+								"chat"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt_token",
+			"value": "insert_token_here",
+			"type": "string"
+		}
+	]
+}
