@@ -17,7 +17,8 @@ import {
   Checkbox,
   FormControlLabel,
   IconButton,
-  Avatar
+  Avatar,
+  Divider
 } from '@mui/material';
 import { 
   FlightTakeoff, 
